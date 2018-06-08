@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>Should Aivo deploy today?</title>
+		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+	    <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script> -->
+
+	    <style type="text/css">
+	    	html {
+			    box-sizing: border-box;
+			    height: 100%;
+			    font-size: 62.5%
+			}
+
+			body {
+			    font-size: 1.4rem;
+			    height: 100%;
+			    display: flex;
+			    flex-direction: row;
+			    align-items: center;
+			    justify-content: center
+			}
+
+			#title {
+				font-size: 5rem;
+				padding-bottom: 1rem;
+			}
+
+			@media (min-width: 800px) {
+			    #title {
+			        font-size: 9rem;
+			    }
+			}
+
+	    </style>
+	</head>
+	<body>
+		<section class="section">
+		<div class="container is-fluid">
+			<div class="columns">
+				<div class="column">
+					
+					<div class="has-text-centered">
+						<h1 class="title" id="title">
+							Hello World
+						</h1>
+					</div>
+					
+					<div  class="has-text-centered">
+							<img id="gif" src="" alt="">
+					</div>
+
+					<div>
+						<a href="#">
+							<p class="subtitle">
+								Need another reason?
+							</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		</section>
+	  <script>
+	  	// Days
+	  	isWeekend = false;
+	  	isFriday = false;
+	  	isWorkday = false;
+	  	// Hours
+	  	isWorkHours = false;
+
+	  	normal_list = [
+	        "I don't see why not", 
+	        "You probably should",
+	        "Someone else already did it",
+	        "Go for it",
+	        "Go go go go!",
+	        "Do it!",
+	        "Ship it!",
+	        "Did you test it?",
+	        "Harder better faster stronger",
+	        "Rock on!",
+	        "Just bring it!",
+	        "Sure, go ahead",
+	        'YES!'
+        ];
+
+	  	friday_list = [
+	  		'Not by any chance',
+	  		'No no no, oops already deployed',
+	  		'WTF dude?',
+	  		'Nothing to do this weekend eh?',
+	  		'How about you wait until 6?',
+	  		'Do it at 6, no one will notice 🤫',
+	  		'Does what I say matter?',
+	  		'Did you already deployed?',
+	  		'Why do you ask if you already know the answer',
+	  		'If he did it, I don\' see why you couldn\'t',
+	  		'NOOoOoOoO, maybe yes?'
+	  	];
+
+	  	weekend_list = [
+	  		'What are you doing here?',
+	  		'Go ahead, lets see what happens',
+	  		'Duuuuude!',
+	  		'I say go to bed',
+	  		'Let\'s talk about this on Monday',
+	  		'Are you nuts?',
+	  		'Chill',
+	  		'NOOOOooooOOOO'
+	  	];
+
+	  	idk_list = [
+	  		'Maybe, meybe not',
+	  		'Ask again later',
+	  		'Give it a rest',
+	  		'How about later',
+	  		'Try again tomorrow'
+	  	];
+        
+	  	date = new Date();
+	  	currentDay = date.getDay();
+	  	currentHour = date.getHours();
+
+	  	if (currentDay === 0 || currentDay === 6) {
+	  		isWeekend = true;
+	  	} else if (currentDay === 5) {
+	  		isFriday = true;
+	  	} else {
+	  		isWorkday = true;
+	  	}
+
+	  	if (currentHour>= 8 && currentHour < 18) {
+	  		isWorkHours = true;
+	  	} else {
+	  		isWorkHours = false;
+	  	}
+	  	
+	  	if (isWeekend) {
+	  		list = weekend_list;
+	  	} else if (isFriday) {
+	  		list = friday_list;
+	  	} else if (isWorkday) {
+	  		list = normal_list;
+	  	} else {
+	  		list = idk_list;
+	  	}
+
+	  	id = getRandomInt(list.length)
+	  	title = document.getElementById('title');
+	  	title.innerHTML = list[id];
+	  	search = slug(list[id]);
+	  	// Special gifs matching phrases
+	  	if (list === weekend_list) {
+	  		if (id === 1) {
+	  			search = 'atomic bomb explosion'
+	  		} else if (id === 2) {
+	  			search = 'duuuude chandler'
+	  		}
+	  	}
+	  	httpGetAsync('http://api.giphy.com/v1/gifs/search?q='+search+'&api_key=NEDZ3SLG9Wai322CnS32to5a1zCZlPzM&limit=5&rating=g&offset='+id, setGif);
+
+	  	function slug (str) {
+	  	    str = str.replace(/^\s+|\s+$/g, '');
+	  	    str = str.toLowerCase();
+
+	  	    str = str.replace(/[^a-z0-9 -]/g, '')
+	  	        .replace(/\s+/g, '+')
+	  	        .replace(/-+/g, '-');
+
+	  	    return str;
+	  	}
+
+
+	  	function getRandomInt(max) {
+			return Math.floor(Math.random() * Math.floor(max));
+	  	}
+
+	  	function httpGetAsync(theUrl, callback) {
+	  	    var xmlHttp = new XMLHttpRequest();
+	  	    xmlHttp.onreadystatechange = function() { 
+	  	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+	  	            callback(xmlHttp.responseText);
+	  	    }
+	  	    xmlHttp.open("GET", theUrl, true); 
+	  	    xmlHttp.send(null);
+	  	}
+
+	  	function setGif(data) {
+	  		data = JSON.parse(data)
+	  		console.log(data)
+	  		id = getRandomInt(5)
+		  	gif = document.getElementById('gif');
+	  		gif.src = data.data[id].images.downsized_medium.url;
+	  	}
+
+
+
+	  </script>
+  </body>
+</html>
