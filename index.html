@@ -54,7 +54,7 @@
 					</div>
 
 					<div>
-						<a href="#">
+						<a href="#" id="another">
 							<p class="subtitle">
 								Need another reason?
 							</p>
@@ -174,7 +174,6 @@
 	  	    return str;
 	  	}
 
-
 	  	function getRandomInt(max) {
 			return Math.floor(Math.random() * Math.floor(max));
 	  	}
@@ -197,7 +196,13 @@
 	  		gif.src = data.data[id].images.downsized_medium.url;
 	  	}
 
+	  	// Reload to get another reason
+	  	another = document.getElementById('another');
+	  	another.onclick = reload;
 
+	  	function reload(event) {
+	  		window.location.reload();
+	  	}
 
 	  </script>
   </body>
